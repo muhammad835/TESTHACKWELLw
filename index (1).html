@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hackwell</title>
+  <meta name="theme-color" content="#111827">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #151b23;
+      --surface-2: #1f2937;
+      --line: #303947;
+      --text: #f8fafc;
+      --muted: #aab4c2;
+      --blue: #38bdf8;
+      --green: #34d399;
+      --yellow: #fbbf24;
+      --red: #fb7185;
+      --shadow: 0 18px 45px rgba(0, 0, 0, 0.32);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        linear-gradient(135deg, rgba(56, 189, 248, 0.16), transparent 34%),
+        linear-gradient(315deg, rgba(52, 211, 153, 0.12), transparent 30%),
+        var(--bg);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .app {
+      width: min(1280px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 22px 0;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border-radius: 8px;
+      color: #061018;
+      background: linear-gradient(135deg, var(--blue), var(--green));
+      font-size: 1.25rem;
+      font-weight: 900;
+      box-shadow: 0 10px 24px rgba(56, 189, 248, 0.22);
+    }
+
+    h1,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(1.45rem, 3vw, 2rem);
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .icon-button,
+    .text-button {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--text);
+      background: var(--surface);
+      cursor: pointer;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .icon-button {
+      width: 44px;
+      padding: 0;
+      font-size: 1.1rem;
+    }
+
+    .text-button {
+      padding: 0 14px;
+      font-weight: 700;
+    }
+
+    .icon-button:hover,
+    .text-button:hover {
+      transform: translateY(-1px);
+      border-color: var(--blue);
+      background: #1b2430;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .sidebar,
+    .player-shell {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(21, 27, 35, 0.92);
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar {
+      padding: 16px;
+    }
+
+    .section-label {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .search {
+      width: 100%;
+      height: 42px;
+      margin-bottom: 14px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      outline: none;
+      color: var(--text);
+      background: #0f141c;
+    }
+
+    .search:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.16);
+    }
+
+    .game-list {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .game-card {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 10px;
+      width: 100%;
+      min-height: 64px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--text);
+      text-align: left;
+      background: #111821;
+      cursor: pointer;
+    }
+
+    .game-card.active {
+      border-color: var(--green);
+      background: #13221f;
+    }
+
+    .game-icon {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      background: var(--surface-2);
+      font-size: 1.25rem;
+    }
+
+    .game-title {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: 800;
+    }
+
+    .game-meta {
+      display: block;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .quick-links {
+      display: grid;
+      gap: 8px;
+    }
+
+    .quick-links a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 40px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--text);
+      text-decoration: none;
+      background: #101720;
+    }
+
+    .player-shell {
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .player-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(15, 20, 28, 0.78);
+    }
+
+    .current-game {
+      min-width: 0;
+    }
+
+    .current-game h2 {
+      margin: 0;
+      overflow: hidden;
+      font-size: 1.15rem;
+      letter-spacing: 0;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .current-game p {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--green);
+      font-size: 0.9rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .status::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 16px currentColor;
+    }
+
+    .frame-wrap {
+      position: relative;
+      height: min(72vh, 720px);
+      min-height: 430px;
+      background: #05070a;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #05070a;
+    }
+
+    .frame-note {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 16px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.9rem;
+      background: #101720;
+    }
+
+    .tag-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--muted);
+      background: #101720;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .hide {
+      display: none;
+    }
+
+    @media (max-width: 860px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .top-actions {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        order: 2;
+      }
+
+      .frame-wrap {
+        height: 64vh;
+        min-height: 360px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .app {
+        width: min(100% - 18px, 1280px);
+        padding-top: 12px;
+      }
+
+      .brand-mark {
+        width: 40px;
+        height: 40px;
+      }
+
+      .text-button {
+        flex: 1 1 auto;
+      }
+
+      .player-header,
+      .frame-note {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .frame-wrap {
+        min-height: 320px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">GH</div>
+        <div>
+          <h1>Hackwell</h1>
+          <p class="subtitle">Clean player, fast controls, easy game switching.</p>
+        </div>
+      </div>
+
+      <div class="top-actions" aria-label="Game controls">
+        <button class="text-button" type="button" id="reloadGame">Reload</button>
+        <button class="text-button" type="button" id="openGame">Open Game</button>
+        <button class="icon-button" type="button" id="fullscreenGame" title="Fullscreen" aria-label="Fullscreen">⛶</button>
+      </div>
+    </header>
+
+    <section class="layout" aria-label="Game hub">
+      <aside class="sidebar">
+        <p class="section-label">Library</p>
+        <input class="search" id="gameSearch" type="search" placeholder="Search games" aria-label="Search games">
+
+        <div class="game-list" id="gameList">
+          <button class="game-card active" type="button" data-src="https://poxel.io/" data-title="Poxel.io" data-type="FPS">
+            <span class="game-icon" aria-hidden="true">🎯</span>
+            <span>
+              <span class="game-title">Poxel.io</span>
+              <span class="game-meta">FPS · multiplayer</span>
+            </span>
+          </button>
+          <button class="game-card" type="button" data-src="https://google-pacman.github.io/play/basket-random.html" data-title="Basket Random" data-type="Sports">
+            <span class="game-icon" aria-hidden="true">🏀</span>
+            <span>
+              <span class="game-title">Basket Random</span>
+              <span class="game-meta">Sports · 2 player</span>
+            </span>
+          </button>
+        </div>
+
+        <p class="section-label">Tools</p>
+        <div class="quick-links">
+          <a href="https://google-pacman.github.io/play/basket-random.html" target="_blank" rel="noopener">Basket Random <span aria-hidden="true">↗</span></a>
+          <a href="https://poxel.io/" target="_blank" rel="noopener">Poxel.io official <span aria-hidden="true">↗</span></a>
+        </div>
+
+        <div class="tag-row" aria-label="Game tags">
+          <span class="tag">Sports</span>
+          <span class="tag">FPS</span>
+          <span class="tag">Arcade</span>
+          <span class="tag">Multiplayer</span>
+          <span class="tag">Fullscreen</span>
+          <span class="tag">Keyboard</span>
+        </div>
+      </aside>
+
+      <section class="player-shell" aria-label="Game player">
+        <div class="player-header">
+          <div class="current-game">
+            <h2 id="currentTitle">Poxel.io</h2>
+            <p id="currentMeta">FPS · ready to play</p>
+          </div>
+          <div class="status" id="gameStatus">Online</div>
+        </div>
+
+        <div class="frame-wrap" id="iframeContainer">
+          <iframe
+            id="gameFrame"
+            src="https://poxel.io/"
+            width="800"
+            height="600"
+            frameborder="0"
+            title="Poxel.io game"
+            scrolling="yes"
+            allow="fullscreen; autoplay; gamepad"
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="frame-note">
+          <span>Use fullscreen for the best layout.</span>
+          <span>Press reload if the game gets stuck.</span>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const frame = document.getElementById("gameFrame");
+    const frameContainer = document.getElementById("iframeContainer");
+    const fullscreenButton = document.getElementById("fullscreenGame");
+    const reloadButton = document.getElementById("reloadGame");
+    const openButton = document.getElementById("openGame");
+    const currentTitle = document.getElementById("currentTitle");
+    const currentMeta = document.getElementById("currentMeta");
+    const gameSearch = document.getElementById("gameSearch");
+    const gameCards = Array.from(document.querySelectorAll(".game-card"));
+
+    function setActiveGame(card) {
+      gameCards.forEach((item) => item.classList.remove("active"));
+      card.classList.add("active");
+      frame.src = card.dataset.src;
+      frame.title = `${card.dataset.title} game`;
+      currentTitle.textContent = card.dataset.title;
+      currentMeta.textContent = `${card.dataset.type} · ready to play`;
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        if (frameContainer.requestFullscreen) {
+          frameContainer.requestFullscreen();
+        }
+        return;
+      }
+
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+
+    function updateFullscreenButton() {
+      fullscreenButton.textContent = document.fullscreenElement ? "×" : "⛶";
+      fullscreenButton.title = document.fullscreenElement ? "Exit fullscreen" : "Fullscreen";
+      fullscreenButton.setAttribute("aria-label", fullscreenButton.title);
+    }
+
+    gameCards.forEach((card) => {
+      card.addEventListener("click", () => setActiveGame(card));
+    });
+
+    gameSearch.addEventListener("input", () => {
+      const query = gameSearch.value.trim().toLowerCase();
+      gameCards.forEach((card) => {
+        const label = `${card.dataset.title} ${card.dataset.type}`.toLowerCase();
+        card.classList.toggle("hide", !label.includes(query));
+      });
+    });
+
+    fullscreenButton.addEventListener("click", toggleFullscreen);
+    document.addEventListener("fullscreenchange", updateFullscreenButton);
+
+    reloadButton.addEventListener("click", () => {
+      frame.src = frame.src;
+    });
+
+    openButton.addEventListener("click", () => {
+      window.open(frame.src, "_blank", "noopener");
+    });
+  </script>
+</body>
+</html>
