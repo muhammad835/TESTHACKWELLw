@@ -417,7 +417,7 @@
         <input class="search" id="gameSearch" type="search" placeholder="Search games" aria-label="Search games">
 
         <div class="game-list" id="gameList">
-          <button class="game-card active" type="button" data-src="https://poxel.io/" data-title="Poxel.io" data-type="FPS">
+          <button class="game-card" type="button" data-src="https://poxel.io/" data-title="Poxel.io" data-type="FPS">
             <span class="game-icon" aria-hidden="true">🎯</span>
             <span>
               <span class="game-title">Poxel.io</span>
@@ -431,7 +431,7 @@
               <span class="game-meta">Adventure · web game</span>
             </span>
           </button>
-          <button class="game-card" type="button" data-src="https://mikumovieispeak.global.ssl.fastly.net/" data-title="Miku Movie" data-type="Media">
+          <button class="game-card active" type="button" data-src="https://mikumovieispeak.global.ssl.fastly.net/" data-title="Miku Movie" data-type="Media">
             <span class="game-icon" aria-hidden="true">🎬</span>
             <span>
               <span class="game-title">Miku Movie</span>
@@ -470,8 +470,8 @@
       <section class="player-shell" aria-label="Game player">
         <div class="player-header">
           <div class="current-game">
-            <h2 id="currentTitle">Poxel.io</h2>
-            <p id="currentMeta">FPS · ready to play</p>
+            <h2 id="currentTitle">Miku Movie</h2>
+            <p id="currentMeta">Media · ready to play</p>
           </div>
           <div class="status" id="gameStatus">Online</div>
         </div>
@@ -479,11 +479,14 @@
         <div class="frame-wrap" id="iframeContainer">
           <iframe
             id="gameFrame"
-            src="https://poxel.io/"
-            width="800"
-            height="600"
+            src="https://mikumovieispeak.global.ssl.fastly.net/"
+            width="560"
+            height="315"
+            style="border:0;"
+            loading="lazy"
             frameborder="0"
-            title="Poxel.io game"
+            referrerpolicy="strict-origin-when-cross-origin"
+            title="Miku Movie"
             scrolling="yes"
             allow="fullscreen; autoplay; gamepad"
             allowfullscreen>
